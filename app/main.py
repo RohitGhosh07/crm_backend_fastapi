@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from .db import engine, Base
-from .routers import clients, auth, admin, commissions
+from .routers import clients, auth, admin, commissions, admin_simple
 
 
 class CustomCORSMiddleware(BaseHTTPMiddleware):
@@ -78,6 +78,7 @@ app.include_router(auth.router)
 app.include_router(clients.router)
 app.include_router(commissions.router)
 app.include_router(admin.router)
+app.include_router(admin_simple.router)
 
 
 @app.get("/healthz")
