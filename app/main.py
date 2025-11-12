@@ -1,10 +1,20 @@
 import os
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from .db import engine, Base
 from .routers import clients, auth, admin, commissions, admin_simple
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: Create database tables (only for local development)
+    if os.getenv("VERCEL") != "1":  # Don't create tables on Vercel
+        Base.metadata.create_all(bind=engine)
+    yield
+    # Shutdown: Add any cleanup here if needed
 
 
 class CustomCORSMiddleware(BaseHTTPMiddleware):
@@ -27,7 +37,7 @@ class CustomCORSMiddleware(BaseHTTPMiddleware):
         return response
 
 
-app = FastAPI(title="SaaS Admin Dashboard - Backend")
+app = FastAPI(title="SaaS Admin Dashboard - Backend", lifespan=lifespan)
 
 # Define allowed origins
 ALLOWED_ORIGINS = [
@@ -60,12 +70,6 @@ app.add_middleware(
     ],
     expose_headers=["*"]
 )
-
-
-@app.on_event("startup")
-def on_startup():
-    # Create database tables (for development/demo). In production, use migrations.
-    Base.metadata.create_all(bind=engine)
 
 
 # Manual OPTIONS handler for preflight requests
