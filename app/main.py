@@ -10,10 +10,11 @@ app = FastAPI(title="SaaS Admin Dashboard - Backend")
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:7000", "http://frontend:7000"],
+    allow_origins=["*"],  # In production, specify exact origins for security
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 
