@@ -23,7 +23,7 @@ class UserRead(BaseModel):
     created_at: Optional[datetime]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Token(BaseModel):
@@ -46,7 +46,7 @@ class ClientRead(BaseModel):
     created_at: Optional[datetime]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CommissionCreate(BaseModel):
@@ -63,4 +63,4 @@ class CommissionRead(BaseModel):
     created_at: Optional[datetime]
 
     class Config:
-        orm_mode = True
+        from_attributes = True

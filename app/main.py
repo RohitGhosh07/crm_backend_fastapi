@@ -1,10 +1,10 @@
 import os
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from .db import engine, Base
-from .routers import clients, auth
+from .routers import clients, auth, admin, commissions
 
 
 class CustomCORSMiddleware(BaseHTTPMiddleware):
@@ -76,6 +76,8 @@ async def options_handler(path: str):
 
 app.include_router(auth.router)
 app.include_router(clients.router)
+app.include_router(commissions.router)
+app.include_router(admin.router)
 
 
 @app.get("/healthz")
